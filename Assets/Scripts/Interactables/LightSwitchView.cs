@@ -13,15 +13,15 @@ public class LightSwitchView : MonoBehaviour, IInteractable
 
     private LightSwitchDelegate lightSwitch;
 
-    private void OnEnable()
-    {
-        lightSwitch = OnLightSwitchToggle;;
-    }
+    private void OnEnable() => lightSwitch += OnLightSwitchToggle;
+
+    private void OnDisable() => lightSwitch -= OnLightSwitchToggle;
+
 
     public void Interact()
     {
         //Todo - Implement Interaction
-        lightSwitch.Invoke();
+        lightSwitch?.Invoke();
         GameService.Instance.GetInstructionView().HideInstruction();
         GameService.Instance.GetSoundView().PlaySoundEffects(SoundType.SwitchSound);
     }
