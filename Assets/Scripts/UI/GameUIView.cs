@@ -24,6 +24,7 @@ public class GameUIView : MonoBehaviour
         tryAgainButton.onClick.AddListener(onTryAgainButtonClicked);
         quitButton.onClick.AddListener(onQuitButtonClicked);
         EventService.Instance.OnKeyPickedUp.AddListener(updateKeyText);
+        EventService.Instance.OnLightsOffByGhostEvent.AddListener(setRedVignette);
     }
     private void OnDisable() => EventService.Instance.OnKeyPickedUp.RemoveListener(updateKeyText);
 
@@ -34,7 +35,7 @@ public class GameUIView : MonoBehaviour
     private void onTryAgainButtonClicked() => SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
 
 
-    //Assignment - Call this method as a lister of LightsOffByGhostEvent
+    //Assignment - Call this method as a listner of LightsOffByGhostEvent
     private void setRedVignette()
     {
         redVignette.enabled = true;
