@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class SkullDropEvent : MonoBehaviour
@@ -6,11 +7,15 @@ public class SkullDropEvent : MonoBehaviour
     [SerializeField] private Transform skulls;
     [SerializeField] private SoundType soundToPlay;
 
+
+    private void OnEnable() => EventService.Instance.OnSkullShower.AddListener(OnSkullDrop);
+    private void OnDisable() => EventService.Instance.OnSkullShower.RemoveListener(OnSkullDrop);
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.GetComponent<PlayerView>() != null && GameService.Instance.GetPlayerController().KeysEquipped >= keysRequiredToTrigger)
         {
-            OnSkullDrop();
+            EventService.Instance.OnSkullShower.InvokeEvent();
             GameService.Instance.GetSoundView().PlaySoundEffects(soundToPlay);
             GetComponent<Collider>().enabled = false;
         }

@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class PlayerSanity : MonoBehaviour
@@ -7,6 +8,19 @@ public class PlayerSanity : MonoBehaviour
     [SerializeField] private float sanityDropAmountPerEvent = 10f;
     private float maxSanity;
     private PlayerController playerController;
+
+    private void OnEnable()
+    {
+        EventService.Instance.OnRatRush.AddListener(OnSuperNaturalEvent);
+        EventService.Instance.OnSkullShower.AddListener(OnSuperNaturalEvent);
+        EventService.Instance.OnPotionDrink.AddListener(OnDrankPotion);
+    }
+
+    private void OnDisable()
+    {
+        EventService.Instance.OnRatRush.RemoveListener(OnSuperNaturalEvent);
+        EventService.Instance.OnSkullShower.RemoveListener(OnSuperNaturalEvent);
+    }
 
     private void Start()
     {
@@ -53,7 +67,7 @@ public class PlayerSanity : MonoBehaviour
         }
         GameService.Instance.GetGameUI().UpdateInsanity(1f - sanityLevel / maxSanity);
     }
-    private void OnSupernaturalEvent()
+    private void OnSuperNaturalEvent()
     {
         increaseSanity(sanityDropAmountPerEvent);
     }

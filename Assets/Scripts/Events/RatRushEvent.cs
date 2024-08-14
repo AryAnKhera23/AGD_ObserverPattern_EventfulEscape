@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class RatRushEvent : MonoBehaviour
@@ -9,11 +10,21 @@ public class RatRushEvent : MonoBehaviour
     private float speed = 7.5f;
     private bool rushActive = false;
 
+    private void OnEnable()
+    {
+        EventService.Instance.OnRatRush.AddListener(onRatRush);
+    }
+
+    private void OnDisable()
+    {
+        EventService.Instance.OnRatRush.RemoveListener(onRatRush);
+    }
+    
     private void OnTriggerEnter(Collider other)
     {
         if (other.GetComponent<PlayerView>() != null)
         {
-            onRatRush();
+            EventService.Instance.OnRatRush.InvokeEvent();
             GameService.Instance.GetSoundView().PlaySoundEffects(soundToPlay);
             GetComponent<Collider>().enabled = false;
         }

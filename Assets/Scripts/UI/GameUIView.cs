@@ -9,7 +9,8 @@ public class GameUIView : MonoBehaviour
     [SerializeField] GameObject rootViewPanel;
     [SerializeField] Image insanityImage;
     [SerializeField] Image redVignette;
-
+    [SerializeField] Image orangeVignette;
+    
     [Header("Keys UI")]
     [SerializeField] TextMeshProUGUI keysFoundText;
 
@@ -26,7 +27,8 @@ public class GameUIView : MonoBehaviour
         EventService.Instance.PlayerEscapedEvent.AddListener(OnPlayerEscaped);
         EventService.Instance.PlayerDeathEvent.AddListener(SetRedVignette);
         EventService.Instance.PlayerDeathEvent.AddListener(OnPlayerDeath);
-
+        EventService.Instance.OnRatRush.AddListener(SetRedVignette);
+        EventService.Instance.OnPotionDrink.AddListener(SetOrangeVignette);
         tryAgainButton.onClick.AddListener(OnTryAgainButtonClicked);
         quitButton.onClick.AddListener(OnQuitButtonClicked);
     }
@@ -38,6 +40,8 @@ public class GameUIView : MonoBehaviour
         EventService.Instance.PlayerEscapedEvent.RemoveListener(OnPlayerEscaped);
         EventService.Instance.PlayerDeathEvent.RemoveListener(SetRedVignette);
         EventService.Instance.PlayerDeathEvent.RemoveListener(OnPlayerDeath);
+        EventService.Instance.OnRatRush.RemoveListener(SetRedVignette);
+        EventService.Instance.OnPotionDrink.RemoveListener(SetOrangeVignette);
     }
 
     public void UpdateInsanity(float playerSanity) => insanityImage.rectTransform.localScale = new Vector3(1, playerSanity, 1);
@@ -50,6 +54,13 @@ public class GameUIView : MonoBehaviour
         redVignette.enabled = true;
         redVignette.canvasRenderer.SetAlpha(0.5f);
         redVignette.CrossFadeAlpha(0, 5, false);
+    }
+
+    private void SetOrangeVignette(int potionEffect)
+    {
+        orangeVignette.enabled = true;
+        orangeVignette.canvasRenderer.SetAlpha(0.5f);
+        orangeVignette.CrossFadeAlpha(0, 5, false);
     }
 
     private void OnPlayerDeath()
